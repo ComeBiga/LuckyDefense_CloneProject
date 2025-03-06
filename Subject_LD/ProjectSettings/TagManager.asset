@@ -52,3 +52,6 @@ TagManager:
   - name: Hero
     uniqueID: 2607336047
     locked: 0
+  - name: UI
+    uniqueID: 1140133759
+    locked: 0

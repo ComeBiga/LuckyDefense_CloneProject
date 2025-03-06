@@ -4,12 +4,42 @@ using UnityEngine;
 
 public class BattleSystem : MonoBehaviour
 {
+    public static BattleSystem Instance => mInstance;
+    private static BattleSystem mInstance = null;
+
     [SerializeField]
     private List<Hero> _heroPrefabs;
     [SerializeField]
+    private WaveSystem _waveSystem;
+    [SerializeField]
     private SummonPointManager _summonPointManager;
+    [SerializeField]
+    private int _startGoldCount = 100;
+    [SerializeField]
+    private int _startSummonHeroPrice = 20;
+    [SerializeField]
+    private int _summonHeroIncreasePrice = 2;
+    [SerializeField]
+    private int _monsterKillRewardGold = 2;
+    [SerializeField]
+    private int _waveEndRewardGold = 20;
 
-    private SummonPoint mSelectedSummonPoint;
+    private int mCurrentGoldCount = 0;
+    private int mCurrentSummonHeroPrice;
+
+    public void SummonRandomHeroWithGold()
+    {
+        if(mCurrentSummonHeroPrice > mCurrentGoldCount)
+        {
+            Debug.LogError($"골드가 부족합니다!");
+            return;
+        }
+
+        SummonRandomHero();
+
+        reduceCurrentGoldCount(mCurrentSummonHeroPrice);
+        addCurrentSummonHeroPrice(_summonHeroIncreasePrice);
+    }
 
     public bool TrySummonHero(int heroID)
     {
@@ -27,50 +57,62 @@ public class BattleSystem : MonoBehaviour
 
     public void SummonRandomHero()
     {
-        TrySummonHero(UnityEngine.Random.Range(0, 1));
+        TrySummonHero(UnityEngine.Random.Range(0, 2));
     }
 
     public void ComposeHero()
     {
-        if(mSelectedSummonPoint == null)
+        if(_summonPointManager.SelectedSummonPoint.PositionType != SummonPoint.EPositionType.Tripple)
         {
             return;
         }
 
-        if(mSelectedSummonPoint.PositionType != SummonPoint.EPositionType.Tripple)
-        {
-            return;
-        }
-
-        var composedHeroes = new List<Hero>(mSelectedSummonPoint.Heroes);
-        mSelectedSummonPoint.Clear();
+        var composedHeroes = new List<Hero>(_summonPointManager.SelectedSummonPoint.Heroes);
+        _summonPointManager.SelectedSummonPoint.Clear();
 
         for(int i = composedHeroes.Count - 1; i >= 0; i--)
         {
             Destroy(composedHeroes[i].gameObject);
         }
 
-        summonHero(UnityEngine.Random.Range(100, 101), mSelectedSummonPoint);
+        summonHero(UnityEngine.Random.Range(100, 101), _summonPointManager.SelectedSummonPoint);
     }
 
-    private void Update()
+    public void SellHero()
     {
-        if (Input.GetMouseButtonDown(0))
+        SummonPoint selectedSummonPoint = _summonPointManager.SelectedSummonPoint;
+        selectedSummonPoint.TryGetHero(out Hero hero);
+        selectedSummonPoint.RemoveHero(hero);
+
+        _summonPointManager.UnSelect();
+
+        addCurrentGoldCount(_waveSystem.CurrentWaveCount);
+
+        Destroy(hero.gameObject);
+    }
+
+    public void RewardMonsterKill()
+    {
+        addCurrentGoldCount(_monsterKillRewardGold);
+    }
+
+    private void Awake()
+    {
+        if (mInstance == null)
         {
-            Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-            RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero, 0f, LayerMask.GetMask("SummonPoint"));
-
-            if (hit.collider != null)
-            {
-                if(hit.collider.CompareTag("SummonPoint"))
-                {
-                    var summonPoint = hit.collider.GetComponent<SummonPoint>();
-
-                    mSelectedSummonPoint = summonPoint;
-                }
-            }
+            mInstance = this;
         }
+    }
+
+    private void Start()
+    {
+        setCurrentGoldCount(_startGoldCount);
+        setCurrentSummonHeroPrice(_startSummonHeroPrice);
+
+        _waveSystem.onNormalWaveEnd += () =>
+        {
+            addCurrentGoldCount(_waveEndRewardGold);
+        };
     }
 
     private void summonHero(int heroID, SummonPoint summonPoint)
@@ -81,5 +123,47 @@ public class BattleSystem : MonoBehaviour
 
         var summonedHeroAttack = summonedHero.GetComponent<HeroAttack>();
         summonedHeroAttack.StartAttack();
+    }
+
+    private void setCurrentGoldCount(int amount)
+    {
+        mCurrentGoldCount = amount;
+
+        UIManager.Instance.SetGoldCount(mCurrentGoldCount);
+    }
+
+    private void addCurrentGoldCount(int amount)
+    {
+        mCurrentGoldCount += amount;
+
+        UIManager.Instance.SetGoldCount(mCurrentGoldCount);
+    }
+
+    private void reduceCurrentGoldCount(int amount)
+    {
+        mCurrentGoldCount -= amount;
+
+        UIManager.Instance.SetGoldCount(mCurrentGoldCount);
+    }
+
+    private void setCurrentSummonHeroPrice(int amount)
+    {
+        mCurrentSummonHeroPrice = amount;
+
+        UIManager.Instance.SetSummonHeroPrice(mCurrentSummonHeroPrice);
+    }
+
+    private void addCurrentSummonHeroPrice(int amount)
+    {
+        mCurrentSummonHeroPrice += amount;
+
+        UIManager.Instance.SetSummonHeroPrice(mCurrentSummonHeroPrice);
+    }
+
+    private void reduceCurrentSummonHeroPrice(int amount)
+    {
+        mCurrentSummonHeroPrice -= amount;
+
+        UIManager.Instance.SetSummonHeroPrice(mCurrentSummonHeroPrice);
     }
 }

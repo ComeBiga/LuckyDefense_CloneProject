@@ -10,11 +10,18 @@ public class SummonPoint : MonoBehaviour
     public List<Hero> Heroes => mHeroes;
     public EPositionType PositionType => mPositionType;
     public bool IsFull => mPositionType == EPositionType.Tripple;
+    public bool IsEmpty => mPositionType == EPositionType.None;
 
     [SerializeField]
     private Transform[] _doublePositions;
     [SerializeField]
     private Transform[] _tripplePositions;
+    [SerializeField]
+    private GameObject _goHoldingSign;
+    [SerializeField]
+    private GameObject _goSelectedSign;
+    [SerializeField]
+    private GameObject _goGoalSign;
 
     private List<Hero> mHeroes = new List<Hero>(3);
     private EPositionType mPositionType = EPositionType.None;
@@ -23,6 +30,12 @@ public class SummonPoint : MonoBehaviour
     {
         mHeroes.Clear();
         refreshPositionType();
+    }
+
+    public void Refresh()
+    {
+        refreshPositionType();
+        setPosition(mPositionType);
     }
 
     public bool TryGetHero(out Hero hero)
@@ -44,6 +57,58 @@ public class SummonPoint : MonoBehaviour
         refreshPositionType();
         setPosition(mPositionType);
     }
+
+    public void AddHeroes(List<Hero> heroes)
+    {
+        foreach(Hero hero in heroes)
+        {
+            AddHero(hero);
+        }
+    }
+
+    public void RemoveHero(Hero hero)
+    {
+        mHeroes.Remove(hero);
+
+        Refresh();
+    }
+
+    public void Hold()
+    {
+        _goHoldingSign.SetActive(true);
+        //_goSelectedSign.SetActive(false);
+    }
+
+    public void UnHold()
+    {
+        _goHoldingSign.SetActive(false);
+        //_goSelectedSign.SetActive(false);
+    }
+
+    public void Select()
+    {
+        //_goHoldingSign.SetActive(true);
+        _goSelectedSign.SetActive(true);
+    }
+
+    public void UnSelect()
+    {
+        //_goHoldingSign.SetActive(false);
+        _goSelectedSign.SetActive(false);
+    }
+
+    public void Goal()
+    {
+        //_goHoldingSign.SetActive(true);
+        _goGoalSign.SetActive(true);
+    }
+
+    public void UnGoal()
+    {
+        //_goHoldingSign.SetActive(false);
+        _goGoalSign.SetActive(false);
+    }
+
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;

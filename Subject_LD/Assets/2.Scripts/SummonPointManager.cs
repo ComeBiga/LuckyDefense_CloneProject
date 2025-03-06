@@ -1,13 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class SummonPointManager : MonoBehaviour
 {
+    public SummonPoint SelectedSummonPoint => mSelectedSummonPoint;
+
     [SerializeField]
     private Transform _summonPointParent;
+    [SerializeField]
+    private Transform _trSummonPointCanvas;
 
     private SummonPoint[] mSummonPoints;
+
+    private SummonPoint mSelectedSummonPoint = null;
+    private SummonPoint mHoldingSummonPoint = null;
+    private SummonPoint mGoalSummonPoint = null;
 
     public SummonPoint FindSummonPoint(int heroID, bool withoutFull = true)
     {
@@ -58,10 +67,99 @@ public class SummonPointManager : MonoBehaviour
         return null;
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public void UnSelect()
+    {
+        mSelectedSummonPoint.UnSelect();
+        mSelectedSummonPoint = null;
+
+        _trSummonPointCanvas.gameObject.SetActive(false);
+    }
+
+    private void Start()
     {
         mSummonPoints = findSummonPoints();
+    }
+
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            // UI 위라면 Raycast 안 함
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                return;
+            }
+
+            if (tryRaycastSummonPoint(out SummonPoint hitSummonPoint))
+            {
+                if(mSelectedSummonPoint != null && hitSummonPoint != mSelectedSummonPoint)
+                {
+                    mSelectedSummonPoint.UnSelect();
+                    mSelectedSummonPoint = null;
+
+                    _trSummonPointCanvas.gameObject.SetActive(false);
+                }
+
+                if (!hitSummonPoint.IsEmpty)
+                {
+                    mHoldingSummonPoint = hitSummonPoint;
+
+                    mHoldingSummonPoint.UnSelect();
+                    mHoldingSummonPoint.Hold();
+                }
+            }
+        }
+
+        if(Input.GetMouseButton(0))
+        {
+            if (mHoldingSummonPoint != null)
+            {
+                if (tryRaycastSummonPoint(out SummonPoint hitSummonPoint))
+                {
+                    if (hitSummonPoint == mHoldingSummonPoint)
+                    {
+
+                    }
+                    else if (hitSummonPoint != mGoalSummonPoint)
+                    {
+                        mGoalSummonPoint?.UnGoal();
+
+                        mGoalSummonPoint = hitSummonPoint;
+                        mGoalSummonPoint.Goal();
+                    }
+                }
+            }
+        }
+
+        if (mHoldingSummonPoint != null && Input.GetMouseButtonUp(0))
+        {
+            if(tryRaycastSummonPoint(out SummonPoint hitSummonPoint))
+            {
+                if(hitSummonPoint == mHoldingSummonPoint)
+                {
+                    mSelectedSummonPoint = hitSummonPoint;
+
+                    mSelectedSummonPoint.UnHold();
+                    mSelectedSummonPoint.Select();
+
+                    _trSummonPointCanvas.transform.position = mSelectedSummonPoint.transform.position;
+                    _trSummonPointCanvas.gameObject.SetActive(true);
+                }
+                else
+                {
+                    mHoldingSummonPoint.UnHold();
+                    mHoldingSummonPoint.UnSelect();
+
+                    mGoalSummonPoint.UnGoal();
+
+                    // 영웅 이동
+                    changeHeroes(mHoldingSummonPoint, mGoalSummonPoint);
+                }
+            }
+
+            mHoldingSummonPoint = null;
+            mGoalSummonPoint = null;
+        }
     }
 
     private SummonPoint[] findSummonPoints()
@@ -69,5 +167,44 @@ public class SummonPointManager : MonoBehaviour
         SummonPoint[] summonPoints = _summonPointParent.GetComponentsInChildren<SummonPoint>();
 
         return summonPoints;
+    }
+
+    private bool tryRaycastSummonPoint(out SummonPoint hitSummonPoint)
+    {
+        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+        RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero, 0f, LayerMask.GetMask("SummonPoint"));
+
+        if (hit.collider != null)
+        {
+            if (hit.collider.CompareTag("SummonPoint"))
+            {
+                hitSummonPoint = hit.collider.GetComponent<SummonPoint>();
+
+                return true;
+            }
+            else
+            {
+                hitSummonPoint = null;
+                return false;
+            }
+        }
+        else
+        {
+            hitSummonPoint = null;
+            return false;
+        }
+    }
+
+    private void changeHeroes(SummonPoint summonPoint1, SummonPoint summonPoint2)
+    {
+        var summonPoint1Heroes = new List<Hero>(summonPoint1.Heroes);
+        var summonPoint2Heroes = new List<Hero>(summonPoint2.Heroes);
+
+        summonPoint1.Clear();
+        summonPoint2.Clear();
+
+        summonPoint1.AddHeroes(summonPoint2Heroes);
+        summonPoint2.AddHeroes(summonPoint1Heroes);
     }
 }
