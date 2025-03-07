@@ -6,6 +6,8 @@ public class MonsterMovement : MonoBehaviour
 {
     public float MoveSpeed => _moveSpeed;
 
+    public bool enable = true;
+
     [SerializeField]
     private float _moveSpeed = 1f;
     [SerializeField]
@@ -36,7 +38,10 @@ public class MonsterMovement : MonoBehaviour
 
     private void Update()
     {
-        transform.position += _moveDirection * _moveSpeed * Time.deltaTime;
+        if(enable)
+        {
+            transform.position += _moveDirection * _moveSpeed * Time.deltaTime;
+        }
     }
 
     private IEnumerator eStartMove()

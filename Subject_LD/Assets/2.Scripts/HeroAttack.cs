@@ -5,17 +5,24 @@ using UnityEngine;
 public class HeroAttack : MonoBehaviour
 {
     [SerializeField]
-    private int _attackDamage = 4;
+    protected int _attackDamage = 4;
     [SerializeField]
-    private float _attackInterval = .5f;
+    protected float _attackInterval = .5f;
     [SerializeField]
-    private float _attackRange = 5f;
+    protected float _attackRange = 5f;
 
-    private HeroAnimation mHeroAnimation;
+    protected HeroAnimation mHeroAnimation;
 
     public void StartAttack()
     {
         StartCoroutine(eSearchTarget());
+    }
+
+    protected virtual void attack(Monster targetMonster)
+    {
+        targetMonster.DecreaseHp(_attackDamage);
+
+        mHeroAnimation.Attack();
     }
 
     private void Awake()
@@ -31,7 +38,7 @@ public class HeroAttack : MonoBehaviour
 
     private IEnumerator eSearchTarget()
     {
-        Monster lastTargetMonster = null;
+        // Monster lastTargetMonster = null;
 
         while (true)
         {
@@ -47,18 +54,11 @@ public class HeroAttack : MonoBehaviour
 
                     attack(targetMonster);
 
-                    lastTargetMonster = targetMonster;
+                    // lastTargetMonster = targetMonster;
                 }
             }
 
             yield return new WaitForSeconds(_attackInterval);
         }
-    }
-
-    private void attack(Monster targetMonster)
-    {
-        targetMonster.DecreaseHp(_attackDamage);
-
-        mHeroAnimation.Attack();
     }
 }

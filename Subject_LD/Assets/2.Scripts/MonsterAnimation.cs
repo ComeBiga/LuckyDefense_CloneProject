@@ -9,16 +9,30 @@ public class MonsterAnimation : MonoBehaviour
 
     private SpriteRenderer _spriteRenderer;
     private Color mDefaultColor;
+    private Color mNormalColor;
+
+    public void Walk()
+    {
+        _spriteRenderer.color = mDefaultColor;
+        mNormalColor = mDefaultColor;
+    }
 
     public void BeHit()
     {
         StartCoroutine(eBeHit());
     }
 
+    public void Stun()
+    {
+        _spriteRenderer.color = Color.magenta;
+        mNormalColor = Color.magenta;
+    }
+
     private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
         mDefaultColor = _spriteRenderer.color;
+        mNormalColor = _spriteRenderer.color;
     }
 
     private IEnumerator eBeHit()
@@ -27,6 +41,6 @@ public class MonsterAnimation : MonoBehaviour
 
         yield return new WaitForSeconds(_beHitInterval);
 
-        _spriteRenderer.color = mDefaultColor;
+        _spriteRenderer.color = mNormalColor;
     }
 }

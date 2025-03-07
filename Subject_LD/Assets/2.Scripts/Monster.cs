@@ -12,6 +12,7 @@ public class Monster : MonoBehaviour
     private int _maxHp = 10;
 
     private int mCurrentHp = 0;
+    private MonsterMovement mMonsterMovement;
     private MonsterAnimation mMonsterAnimation;
     private MonsterCanvas mMonsterCanvas;
 
@@ -34,6 +35,11 @@ public class Monster : MonoBehaviour
         mMonsterCanvas.SetHPBar(mCurrentHp, _maxHp);
     }
 
+    public void Stun(float duration)
+    {
+        StartCoroutine(eStun(duration));
+    }
+
     public void Die()
     {
         onDied?.Invoke();
@@ -43,9 +49,21 @@ public class Monster : MonoBehaviour
 
     private void Start()
     {
+        mMonsterMovement = GetComponent<MonsterMovement>();
         mMonsterAnimation = GetComponent<MonsterAnimation>();
         mMonsterCanvas = GetComponentInChildren<MonsterCanvas>();
 
         mCurrentHp = _maxHp;
+    }
+
+    private IEnumerator eStun(float duration)
+    {
+        mMonsterMovement.enable = false;
+        mMonsterAnimation.Stun();
+
+        yield return new WaitForSeconds(duration);
+
+        mMonsterMovement.enable = true;
+        mMonsterAnimation.Walk();
     }
 }
