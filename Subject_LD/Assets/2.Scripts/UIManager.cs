@@ -15,6 +15,8 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI _txtGoldCount;
     [SerializeField]
+    private TextMeshProUGUI _txtDiaCount;
+    [SerializeField]
     private TextMeshProUGUI _txtSummonHeroPrice;
     [SerializeField]
     private TextMeshProUGUI _txtMonsterCount;
@@ -34,9 +36,14 @@ public class UIManager : MonoBehaviour
         _txtCurrentWave.text = $"Wave {currentWave}";
     }
 
-    public void SetGoldCount(int goldCount)
+    public void SetGoldCount(int count)
     {
-        _txtGoldCount.text = $"Gold {goldCount}";
+        _txtGoldCount.text = $"Gold {count}";
+    }
+
+    public void SetDiaCount(int count)
+    {
+        _txtDiaCount.text = $"Dia {count}";
     }
 
     public void SetSummonHeroPrice(int price)
