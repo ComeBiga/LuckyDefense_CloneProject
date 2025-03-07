@@ -11,6 +11,8 @@ public class SummonPointManager : MonoBehaviour
     private Transform _summonPointParent;
     [SerializeField]
     private Transform _trSummonPointCanvas;
+    [SerializeField]
+    private Transform _trHeroAttackRange;
 
     private SummonPoint[] mSummonPoints;
 
@@ -73,6 +75,7 @@ public class SummonPointManager : MonoBehaviour
         mSelectedSummonPoint = null;
 
         _trSummonPointCanvas.gameObject.SetActive(false);
+        hideHeroAttackRange();
     }
 
     private void Start()
@@ -94,10 +97,7 @@ public class SummonPointManager : MonoBehaviour
             {
                 if(mSelectedSummonPoint != null && hitSummonPoint != mSelectedSummonPoint)
                 {
-                    mSelectedSummonPoint.UnSelect();
-                    mSelectedSummonPoint = null;
-
-                    _trSummonPointCanvas.gameObject.SetActive(false);
+                    UnSelect();
                 }
 
                 if (!hitSummonPoint.IsEmpty)
@@ -106,6 +106,13 @@ public class SummonPointManager : MonoBehaviour
 
                     mHoldingSummonPoint.UnSelect();
                     mHoldingSummonPoint.Hold();
+                }
+            }
+            else
+            {
+                if (mSelectedSummonPoint != null)
+                {
+                    UnSelect();
                 }
             }
         }
@@ -135,6 +142,7 @@ public class SummonPointManager : MonoBehaviour
         {
             if(tryRaycastSummonPoint(out SummonPoint hitSummonPoint))
             {
+                // 합성 및 판매 UI 표시
                 if(hitSummonPoint == mHoldingSummonPoint)
                 {
                     mSelectedSummonPoint = hitSummonPoint;
@@ -144,6 +152,8 @@ public class SummonPointManager : MonoBehaviour
 
                     _trSummonPointCanvas.transform.position = mSelectedSummonPoint.transform.position;
                     _trSummonPointCanvas.gameObject.SetActive(true);
+
+                    showHeroAttackRange(mSelectedSummonPoint);
                 }
                 else
                 {
@@ -206,5 +216,21 @@ public class SummonPointManager : MonoBehaviour
 
         summonPoint1.AddHeroes(summonPoint2Heroes);
         summonPoint2.AddHeroes(summonPoint1Heroes);
+    }
+
+    private void showHeroAttackRange(SummonPoint summonPoint)
+    {
+        summonPoint.TryGetHero(out Hero hero);
+        var heroAttack = hero.GetComponent<HeroAttack>();
+
+        _trHeroAttackRange.position = summonPoint.transform.position;
+        _trHeroAttackRange.localScale = Vector3.one * heroAttack.AttackRange * 2f;
+
+        _trHeroAttackRange.gameObject.SetActive(true);
+    }
+
+    private void hideHeroAttackRange()
+    {
+        _trHeroAttackRange.gameObject.SetActive(false);
     }
 }

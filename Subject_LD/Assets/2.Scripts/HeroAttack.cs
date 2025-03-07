@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class HeroAttack : MonoBehaviour
 {
+    public float AttackRange => _attackRange;
+
     [SerializeField]
     protected int _attackDamage = 4;
     [SerializeField]
     protected float _attackInterval = .5f;
     [SerializeField]
-    protected float _attackRange = 5f;
+    protected float _attackRange = 3f;
 
     protected HeroAnimation mHeroAnimation;
 

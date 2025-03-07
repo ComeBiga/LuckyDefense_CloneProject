@@ -182,7 +182,8 @@ public class BattleSystem : MonoBehaviour
             Destroy(composedHeroes[i].gameObject);
         }
 
-        summonHero(UnityEngine.Random.Range(100, 101), _summonPointManager.SelectedSummonPoint);
+        // summonHero(UnityEngine.Random.Range(100, 101), _summonPointManager.SelectedSummonPoint);
+        TrySummonHero(UnityEngine.Random.Range(100, 101));
     }
 
     public void SellHero()
