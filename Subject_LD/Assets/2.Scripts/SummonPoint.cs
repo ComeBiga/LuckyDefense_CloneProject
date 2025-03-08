@@ -25,6 +25,17 @@ public class SummonPoint : MonoBehaviour
     private GameObject _goSelectedSign;
     [SerializeField]
     private GameObject _goGoalSign;
+    [Header("Grade")]
+    [SerializeField]
+    private SpriteRenderer _srGrade;
+    [SerializeField]
+    private Color _colorNormal;
+    [SerializeField]
+    private Color _colorRare;
+    [SerializeField]
+    private Color _colorHero;
+    [SerializeField]
+    private Color _colorMyth;
 
     private List<Hero> mHeroes = new List<Hero>(3);
     private EPositionType mPositionType = EPositionType.None;
@@ -32,11 +43,13 @@ public class SummonPoint : MonoBehaviour
     public void Clear()
     {
         mHeroes.Clear();
+        refreshGrade();
         refreshPositionType();
     }
 
     public void Refresh()
     {
+        refreshGrade();
         refreshPositionType();
         setPosition(mPositionType);
     }
@@ -67,8 +80,7 @@ public class SummonPoint : MonoBehaviour
     {
         mHeroes.Add(hero);
 
-        refreshPositionType();
-        setPosition(mPositionType);
+        Refresh();
 
         onAddHero?.Invoke(hero, mPositionType);
     }
@@ -139,6 +151,31 @@ public class SummonPoint : MonoBehaviour
         }
 
         mPositionType = (EPositionType)mHeroes.Count;
+    }
+
+    private void refreshGrade()
+    {
+        if(!TryGetHero(out Hero hero))
+        {
+            _srGrade.color = new Color(1f, 1f, 1f, 0f);
+            return;
+        }
+
+        switch (hero.Grade)
+        {
+            case Hero.EGrade.Normal:
+                _srGrade.color = _colorNormal;
+                break;
+            case Hero.EGrade.Rare:
+                _srGrade.color = _colorRare;
+                break;
+            case Hero.EGrade.Hero:
+                _srGrade.color = _colorHero;
+                break;
+            case Hero.EGrade.Myth:
+                _srGrade.color = _colorMyth;
+                break;
+        }
     }
 
     private void setPosition(EPositionType positionType)
