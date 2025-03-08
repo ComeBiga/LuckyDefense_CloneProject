@@ -29,6 +29,8 @@ public class WaveSystem : MonoBehaviour
     private float _spawnInterval;
     [SerializeField]
     private Transform[] _wayPoints;
+    [SerializeField]
+    private Transform[] _oppositeWayPoints;
 
     private float mWaveTimer;
     private int mCurrentWaveCount = 0;
@@ -95,7 +97,8 @@ public class WaveSystem : MonoBehaviour
                 {
                     spawnTimer = 0f;
 
-                    spawnMonster(_monsterPrefabs[0]);
+                    spawnMonster(_monsterPrefabs[0], _wayPoints);
+                    spawnMonster(_monsterPrefabs[0], _oppositeWayPoints);
                 }
             }
             else
@@ -143,7 +146,7 @@ public class WaveSystem : MonoBehaviour
         onBossWaveEnd?.Invoke();
     }
 
-    private Monster spawnMonster(Monster monsterPrefab)
+    private Monster spawnMonster(Monster monsterPrefab, Transform[] wayPoints)
     {
         Monster newMonster = Instantiate<Monster>(monsterPrefab);
         newMonster.onDied += () =>
@@ -154,7 +157,7 @@ public class WaveSystem : MonoBehaviour
         };
 
         var monsterMovement = newMonster.GetComponent<MonsterMovement>();
-        monsterMovement.SetWayPoints(_wayPoints);
+        monsterMovement.SetWayPoints(wayPoints);
         monsterMovement.StartMove();
 
         mMonsters.Add(newMonster);
@@ -165,6 +168,6 @@ public class WaveSystem : MonoBehaviour
 
     private Monster spawnBossMonster()
     {
-        return spawnMonster(_bossMonsterPrefab);
+        return spawnMonster(_bossMonsterPrefab, _wayPoints);
     }
 }

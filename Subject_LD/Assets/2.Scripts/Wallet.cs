@@ -1,14 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GoldManager : MonoBehaviour
+public class Wallet : MonoBehaviour
 {
-    public static GoldManager Instance => mInstance;
-    private static GoldManager mInstance = null;
-
     public int CurrentGoldCount => mCurrentGoldCount;
     public int CurrentDiaCount => mCurrentDiaCount;
+
+    public event Action<int> onGoldChanged = null;
+    public event Action<int> onDiaChanged = null;
 
     //[SerializeField]
     //private int _startGoldCount = 100;
@@ -22,50 +23,47 @@ public class GoldManager : MonoBehaviour
     {
         mCurrentGoldCount = amount;
 
-        UIManager.Instance.SetGoldCount(mCurrentGoldCount);
+        onGoldChanged?.Invoke(mCurrentGoldCount);
+        // UIManager.Instance.SetGoldCount(mCurrentGoldCount);
     }
 
     public void AddCurrentGoldCount(int amount)
     {
         mCurrentGoldCount += amount;
 
-        UIManager.Instance.SetGoldCount(mCurrentGoldCount);
+        onGoldChanged?.Invoke(mCurrentGoldCount);
+        //UIManager.Instance.SetGoldCount(mCurrentGoldCount);
     }
 
     public void ReduceCurrentGoldCount(int amount)
     {
         mCurrentGoldCount -= amount;
 
-        UIManager.Instance.SetGoldCount(mCurrentGoldCount);
+        onGoldChanged?.Invoke(mCurrentGoldCount);
+        //UIManager.Instance.SetGoldCount(mCurrentGoldCount);
     }
 
     public void SetCurrentDiaCount(int amount)
     {
         mCurrentDiaCount = amount;
 
-        UIManager.Instance.SetDiaCount(mCurrentDiaCount);
+        onDiaChanged?.Invoke(mCurrentDiaCount);
+        //UIManager.Instance.SetDiaCount(mCurrentDiaCount);
     }
 
     public void AddCurrentDiaCount(int amount)
     {
         mCurrentDiaCount += amount;
 
-        UIManager.Instance.SetDiaCount(mCurrentDiaCount);
+        onDiaChanged?.Invoke(mCurrentDiaCount);
+        //UIManager.Instance.SetDiaCount(mCurrentDiaCount);
     }
 
     public void ReduceCurrentDiaCount(int amount)
     {
         mCurrentDiaCount -= amount;
 
-        UIManager.Instance.SetDiaCount(mCurrentDiaCount);
-    }
-
-
-    private void Awake()
-    {
-        if (mInstance == null)
-        {
-            mInstance = this;
-        }
+        onDiaChanged?.Invoke(mCurrentDiaCount);
+        //UIManager.Instance.SetDiaCount(mCurrentDiaCount);
     }
 }

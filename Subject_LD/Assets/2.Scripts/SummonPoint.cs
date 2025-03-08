@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,8 @@ public class SummonPoint : MonoBehaviour
     public EPositionType PositionType => mPositionType;
     public bool IsFull => mPositionType == EPositionType.Tripple;
     public bool IsEmpty => mPositionType == EPositionType.None;
+
+    public event Action<Hero, EPositionType> onAddHero = null;
 
     [SerializeField]
     private Transform[] _doublePositions;
@@ -56,6 +59,8 @@ public class SummonPoint : MonoBehaviour
 
         refreshPositionType();
         setPosition(mPositionType);
+
+        onAddHero?.Invoke(hero, mPositionType);
     }
 
     public void AddHeroes(List<Hero> heroes)

@@ -7,6 +7,8 @@ public class SummonPointManager : MonoBehaviour
 {
     public SummonPoint SelectedSummonPoint => mSelectedSummonPoint;
 
+    public bool interactable = true;
+
     [SerializeField]
     private Transform _summonPointParent;
     [SerializeField]
@@ -85,6 +87,11 @@ public class SummonPointManager : MonoBehaviour
 
     private void Update()
     {
+        if(!interactable)
+        {
+            return;
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
             // UI 위라면 Raycast 안 함

@@ -2,26 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance => mInstance;
     private static UIManager mInstance = null;
 
-    [SerializeField]
-    private TextMeshProUGUI _txtRemainWaveTime;
-    [SerializeField]
-    private TextMeshProUGUI _txtCurrentWave;
-    [SerializeField]
-    private TextMeshProUGUI _txtGoldCount;
-    [SerializeField]
-    private TextMeshProUGUI _txtDiaCount;
-    [SerializeField]
-    private TextMeshProUGUI _txtSummonHeroPrice;
-    [SerializeField]
-    private TextMeshProUGUI _txtMonsterCount;
-    [SerializeField]
-    private TextMeshProUGUI _txtNextWaveTimer;
+    public TextMeshProUGUI _txtRemainWaveTime;
+    public TextMeshProUGUI _txtCurrentWave;
+    public TextMeshProUGUI _txtGoldCount;
+    public TextMeshProUGUI _txtDiaCount;
+    public TextMeshProUGUI _txtSummonHeroPrice;
+    public TextMeshProUGUI _txtMonsterCount;
+    public TextMeshProUGUI _txtNextWaveTimer;
+
+    public Button btnSummonHero;
+    public Button btnNormalGamble;
+    public Button btnHeroGamble;
+    public Button btnMythGamble;
+    public Button btnComposeHero;
+    public Button btnSellHero;
 
     public void SetRemainWaveTime(float remainWaveTime)
     {

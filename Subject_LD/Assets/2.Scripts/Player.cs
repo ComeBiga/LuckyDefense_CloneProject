@@ -1,0 +1,265 @@
+using BehaviourTree;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Player : MonoBehaviour
+{
+    public Wallet Wallet => mWallet;
+
+    [SerializeField]
+    private GamblingSystem _GamblingSystem;
+    [SerializeField]
+    private SummonPointManager _summonPointManager;
+
+    [Header("Gold")]
+    [SerializeField]
+    private int _startGoldCount = 100;
+    [SerializeField]
+    private int _startDiaCount = 0;
+    [SerializeField]
+    private int _startSummonHeroPrice = 20;
+    [SerializeField]
+    private int _summonHeroIncreasePrice = 2;
+    [SerializeField]
+    private int _monsterKillRewardGold = 2;
+    [SerializeField]
+    private int _waveEndRewardGold = 20;
+    [SerializeField]
+    private int _sellHeroGold = 6;
+
+    private int mCurrentSummonHeroPrice;
+    private int mSummonHeroIncreasePrice = 2;
+    private bool mbPlayable = false;
+
+    // private HeroManager mHeroManager;
+    private Wallet mWallet;
+    private BehaviourTreeRunner mBTRunner;
+
+    public void Init(bool playable)
+    {
+        mWallet = new Wallet();
+
+        if (playable)
+        {
+            SetPlayable();
+        }
+
+        _summonPointManager.interactable = playable;
+
+        mCurrentSummonHeroPrice = _startSummonHeroPrice;
+        mSummonHeroIncreasePrice = _summonHeroIncreasePrice;
+
+        mWallet.SetCurrentGoldCount(_startGoldCount);
+        mWallet.SetCurrentDiaCount(_startDiaCount);
+
+        setCurrentSummonHeroPrice(_startSummonHeroPrice);
+    }
+
+    public void SetPlayable()
+    {
+        mbPlayable = true;
+
+        UIManager.Instance.btnSummonHero.onClick.AddListener(() =>
+        {
+            SummonHero();
+        });
+
+        UIManager.Instance.btnComposeHero.onClick.AddListener(() =>
+        {
+            ComposeHero();
+        });
+
+        UIManager.Instance.btnSellHero.onClick.AddListener(() =>
+        {
+            SellHero();
+        });
+        
+        // 도박
+        UIManager.Instance.btnNormalGamble.onClick.AddListener(() =>
+        {
+            GambleHero(Hero.EGrade.Normal);
+        });
+        
+        UIManager.Instance.btnHeroGamble.onClick.AddListener(() =>
+        {
+            GambleHero(Hero.EGrade.Hero);
+        });
+        
+        UIManager.Instance.btnMythGamble.onClick.AddListener(() =>
+        {
+            GambleHero(Hero.EGrade.Myth);
+        });
+
+        // 재화 갱신
+        mWallet.onGoldChanged += (currentGoldCount) =>
+        {
+            UIManager.Instance.SetGoldCount(currentGoldCount);
+        };
+
+        mWallet.onDiaChanged += (currentDiaCount) =>
+        {
+            UIManager.Instance.SetDiaCount(currentDiaCount);
+        };
+    }
+
+    public INode.EState SummonHero()
+    {
+        if (mCurrentSummonHeroPrice > mWallet.CurrentGoldCount)
+        {
+            Debug.LogError($"골드가 부족합니다!");
+            return INode.EState.Failure;
+        }
+
+        int randomHeroID = UnityEngine.Random.Range(0, 2);
+        HeroManager.Instance.SummonHero(randomHeroID, _summonPointManager);
+
+        mWallet.ReduceCurrentGoldCount(mCurrentSummonHeroPrice);
+        addCurrentSummonHeroPrice(_summonHeroIncreasePrice);
+
+        return INode.EState.Success;
+    }
+
+    public INode.EState GambleHero(Hero.EGrade grade)
+    {
+        if(!_GamblingSystem.IsAvailable(grade, mWallet.CurrentDiaCount))
+        {
+            return INode.EState.Failure;
+        }
+
+        mWallet.ReduceCurrentDiaCount(_GamblingSystem.GetPrice(grade));
+
+        if (_GamblingSystem.GambleHero(grade))
+        {
+            List<Hero> heroPrefabsByGrade = HeroManager.Instance.GetHeroPrefabsByGrade(grade);
+
+            int randomIndex = UnityEngine.Random.Range(0, heroPrefabsByGrade.Count);
+            Hero randomHero = heroPrefabsByGrade[randomIndex];
+
+            HeroManager.Instance.SummonHero(randomHero.ID, _summonPointManager);
+        }
+
+        return INode.EState.Success;
+    }
+
+    public INode.EState ComposeHero()
+    {
+        if (_summonPointManager.SelectedSummonPoint.PositionType != SummonPoint.EPositionType.Tripple)
+        {
+            return INode.EState.Failure;
+        }
+
+        var composedHeroes = new List<Hero>(_summonPointManager.SelectedSummonPoint.Heroes);
+        _summonPointManager.SelectedSummonPoint.Clear();
+
+        Hero.EGrade grade = composedHeroes[0].Grade;
+
+        for (int i = composedHeroes.Count - 1; i >= 0; i--)
+        {
+            Destroy(composedHeroes[i].gameObject);
+        }
+
+        int randomHeroID = 0;
+        List<Hero> heroPrefabs = new List<Hero>(10);
+
+        switch (grade)
+        {
+            case Hero.EGrade.Normal:
+                heroPrefabs = HeroManager.Instance.GetHeroPrefabsByGrade(Hero.EGrade.Rare);
+                break;
+            case Hero.EGrade.Rare:
+                heroPrefabs = HeroManager.Instance.GetHeroPrefabsByGrade(Hero.EGrade.Hero);
+                break;
+            case Hero.EGrade.Hero:
+                heroPrefabs = HeroManager.Instance.GetHeroPrefabsByGrade(Hero.EGrade.Myth);
+                break;
+        }
+
+        int randomIndex = UnityEngine.Random.Range(0, heroPrefabs.Count);
+        Hero randomHero = heroPrefabs[randomIndex];
+        randomHeroID = randomHero.ID;
+
+        // TrySummonHero(randomHeroID);
+        HeroManager.Instance.SummonHero(randomHeroID, _summonPointManager);
+
+        return INode.EState.Success;
+    }
+
+    public INode.EState SellHero()
+    {
+        SummonPoint selectedSummonPoint = _summonPointManager.SelectedSummonPoint;
+        selectedSummonPoint.TryGetHero(out Hero hero);
+        selectedSummonPoint.RemoveHero(hero);
+
+        _summonPointManager.UnSelect();
+
+        mWallet.AddCurrentGoldCount(_sellHeroGold);
+
+        HeroManager.Instance.KillHero(hero);
+
+        return INode.EState.Success;
+    }
+
+
+    public void Run()
+    {
+        mBTRunner = new BehaviourTreeRunner(CreateBehaviourTree());
+
+        StartCoroutine(eRunBT());
+    }
+
+    private INode CreateBehaviourTree()
+    {
+        var selectorNode = new SelectorNode(
+            new List<INode>()
+            {
+                new ActionNode(SummonHero),
+            });
+
+        var rootNode = selectorNode;
+
+        return rootNode;
+    }
+
+    private IEnumerator eRunBT()
+    {
+        float interval = .5f;
+        float timer = 0;
+
+        while (true)
+        {
+            if (timer > interval)
+            {
+                timer = 0;
+                mBTRunner.Operate();
+            }
+
+            timer += Time.deltaTime;
+            yield return null;
+        }
+    }
+
+    private void setCurrentSummonHeroPrice(int amount)
+    {
+        mCurrentSummonHeroPrice = amount;
+
+        if(mbPlayable)
+            UIManager.Instance.SetSummonHeroPrice(mCurrentSummonHeroPrice);
+    }
+
+    private void addCurrentSummonHeroPrice(int amount)
+    {
+        mCurrentSummonHeroPrice += amount;
+
+        if(mbPlayable)
+            UIManager.Instance.SetSummonHeroPrice(mCurrentSummonHeroPrice);
+    }
+
+    private void reduceCurrentSummonHeroPrice(int amount)
+    {
+        mCurrentSummonHeroPrice -= amount;
+
+        if(mbPlayable)
+            UIManager.Instance.SetSummonHeroPrice(mCurrentSummonHeroPrice);
+    }
+}
