@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 
 public class SummonPointManager : MonoBehaviour
 {
+    public SummonPoint[] SummonPoints => mSummonPoints;
     public SummonPoint SelectedSummonPoint => mSelectedSummonPoint;
 
     public bool interactable = true;

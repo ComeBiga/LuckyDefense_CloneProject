@@ -75,5 +75,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: Monster_Boss_0
       objectReference: {fileID: 0}
+    - target: {fileID: 8306656744213673681, guid: 96b40b247aa20454ebc2f5ae97cc987a, type: 3}
+      propertyPath: _maxHp
+      value: 200000
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 96b40b247aa20454ebc2f5ae97cc987a, type: 3}

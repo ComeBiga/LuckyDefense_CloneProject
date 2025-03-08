@@ -211,6 +211,23 @@ public class Player : MonoBehaviour
 
         mWallet.AddCurrentGoldCount(_sellHeroGold);
 
+        // ÆÇ¸Å½Ã °°Àº ¿µ¿õ ¹¶Ä¡±â
+        for(int i = 0; i < _summonPointManager.SummonPoints.Length; ++i)
+        {
+            SummonPoint targetSummonPoint = _summonPointManager.SummonPoints[i];
+
+            if(targetSummonPoint != selectedSummonPoint && targetSummonPoint.Contains(hero.ID))
+            {
+                if(targetSummonPoint.Heroes.Count <= selectedSummonPoint.Heroes.Count)
+                {
+                    targetSummonPoint.TryGetHero(out Hero targetHero);
+                    targetSummonPoint.RemoveHero(targetHero);
+
+                    selectedSummonPoint.AddHero(targetHero);
+                }
+            }
+        }
+
         HeroManager.Instance.KillHero(hero);
 
         return INode.EState.Success;

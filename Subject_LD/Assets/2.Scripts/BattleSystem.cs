@@ -8,6 +8,8 @@ public class BattleSystem : MonoBehaviour
     public static BattleSystem Instance => mInstance;
     private static BattleSystem mInstance = null;
 
+    public bool runAI = true;
+
     [SerializeField]
     private List<Hero> _heroPrefabs;
     [SerializeField]
@@ -50,7 +52,11 @@ public class BattleSystem : MonoBehaviour
             _AI.Wallet.AddCurrentGoldCount(_waveEndRewardGold);
         };
 
-        _AI.Run();
+        if (runAI)
+        {
+            _AI.Run();
+        }
+
         // _player.Run();
     }
 }

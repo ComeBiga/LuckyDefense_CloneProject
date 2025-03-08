@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 2941865507169276834}
   - component: {fileID: 2941865507169276835}
   - component: {fileID: 2941865507169276832}
-  - component: {fileID: 5865843596150900808}
   - component: {fileID: 1609925480810932812}
+  - component: {fileID: 5865843596150900808}
   m_Layer: 0
   m_Name: Hero_Normal_1
   m_TagString: Untagged
@@ -101,6 +101,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _ID: 1
   _grade: 0
+--- !u!114 &1609925480810932812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2941865507169276831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c59e1f3bda454c3498947e3b90620f13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _attackDamage: 50
+  _attackInterval: 1
+  _attackRange: 3
+  _projectilePrefab: {fileID: 7302963075708324314, guid: e0c346ce9cb05e34fb7de1bf8bd3e598, type: 3}
 --- !u!114 &5865843596150900808
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,19 +130,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _attackInterval: 0.2
---- !u!114 &1609925480810932812
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2941865507169276831}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c59e1f3bda454c3498947e3b90620f13, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _attackDamage: 4
-  _attackInterval: 0.3
-  _attackRange: 3
-  _projectilePrefab: {fileID: 7302963075708324314, guid: e0c346ce9cb05e34fb7de1bf8bd3e598, type: 3}

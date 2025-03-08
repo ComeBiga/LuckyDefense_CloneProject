@@ -41,6 +41,16 @@ public class SummonPoint : MonoBehaviour
         setPosition(mPositionType);
     }
 
+    public bool Contains(int heroID)
+    {
+        if(!TryGetHero(out Hero hero))
+        {
+            return false;
+        }
+
+        return heroID == hero.ID;
+    }
+
     public bool TryGetHero(out Hero hero)
     {
         if(mHeroes.Count == 0)

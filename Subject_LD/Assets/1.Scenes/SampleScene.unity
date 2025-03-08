@@ -7131,7 +7131,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _GamblingSystem: {fileID: 2111186289}
   _summonPointManager: {fileID: 1653835244}
-  _startGoldCount: 100
+  _startGoldCount: 10000
   _startDiaCount: 100
   _startSummonHeroPrice: 20
   _summonHeroIncreasePrice: 2
@@ -7928,6 +7928,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cae59a1630563ac43aaf97a25579723b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  runAI: 0
   _heroPrefabs:
   - {fileID: 2941865507169276832, guid: 973e17193f67cec43b70c4284893e0ca, type: 3}
   - {fileID: 2941865507169276832, guid: 40012dde8db52594685b16856a6e868e, type: 3}
