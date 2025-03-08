@@ -15,8 +15,6 @@ public class BattleSystem : MonoBehaviour
     [SerializeField]
     private WaveSystem _waveSystem;
     [SerializeField]
-    private SummonPointManager _summonPointManager;
-    [SerializeField]
     private Player _player;
     [SerializeField]
     private Player _AI;

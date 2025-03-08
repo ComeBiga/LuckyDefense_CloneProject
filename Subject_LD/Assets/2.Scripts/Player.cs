@@ -204,7 +204,10 @@ public class Player : MonoBehaviour
 
         HeroManager.Instance.SummonHero(randomHeroID, _summonPointManager);
 
-        _summonPointManager.UnSelect();
+        if (mbPlayable)
+        {
+            _summonPointManager.UnSelect();
+        }
 
         return INode.EState.Success;
     }

@@ -10450,8 +10450,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _GamblingSystem: {fileID: 2111186289}
   _summonPointManager: {fileID: 1653835244}
-  _startGoldCount: 10000
-  _startDiaCount: 100
+  _startGoldCount: 100
+  _startDiaCount: 0
   _startSummonHeroPrice: 20
   _summonHeroIncreasePrice: 2
   _monsterKillRewardGold: 2
@@ -11247,7 +11247,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cae59a1630563ac43aaf97a25579723b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runAI: 0
+  runAI: 1
   _heroPrefabs:
   - {fileID: 2941865507169276832, guid: 973e17193f67cec43b70c4284893e0ca, type: 3}
   - {fileID: 2941865507169276832, guid: 40012dde8db52594685b16856a6e868e, type: 3}
@@ -11258,7 +11258,6 @@ MonoBehaviour:
   - {fileID: 2941865507169276832, guid: f816d1eb1752b514089e3dfa7fac18e5, type: 3}
   - {fileID: 2941865507169276832, guid: eebe0fdca9c24954dbee4adf6e03ac93, type: 3}
   _waveSystem: {fileID: 2111186287}
-  _summonPointManager: {fileID: 0}
   _player: {fileID: 1838997065}
   _AI: {fileID: 1729924089}
   _monsterKillRewardGold: 2
@@ -11299,7 +11298,7 @@ MonoBehaviour:
   _waveTime: 20
   _bossWaveTime: 60
   _waveInterval: 5
-  _bossWaveNumber: 10
+  _bossWaveNumber: 3
   _spawnCount: 5
   _spawnInterval: 1
   _wayPoints:
