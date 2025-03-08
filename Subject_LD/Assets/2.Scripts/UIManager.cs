@@ -23,6 +23,7 @@ public class UIManager : MonoBehaviour
     public Button btnMythGamble;
     public Button btnComposeHero;
     public Button btnSellHero;
+    public Button btnComposeMythHero;
 
     public void SetRemainWaveTime(float remainWaveTime)
     {

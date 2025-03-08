@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2941865507169276832}
   - component: {fileID: 8901857249854593114}
   - component: {fileID: 5865843596150900808}
+  - component: {fileID: 7096028670222134977}
   m_Layer: 0
   m_Name: Hero_Myth_0
   m_TagString: Untagged
@@ -130,3 +131,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _attackInterval: 0.2
+--- !u!114 &7096028670222134977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2941865507169276831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9e70197ca4909543834871b96df0163, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hero: {fileID: 2941865507169276832}
+  _materialHeroes:
+  - {fileID: 2941865507169276832, guid: 973e17193f67cec43b70c4284893e0ca, type: 3}
+  - {fileID: 2941865507169276832, guid: 40012dde8db52594685b16856a6e868e, type: 3}

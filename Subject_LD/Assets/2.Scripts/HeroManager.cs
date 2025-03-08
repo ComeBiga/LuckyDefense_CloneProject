@@ -7,6 +7,8 @@ public class HeroManager : MonoBehaviour
     public static HeroManager Instance => mInstance;
     private static HeroManager mInstance = null;
 
+    public List<Hero> SummonedHeroes => mSummonedHeroes;
+
     [SerializeField]
     private List<Hero> _heroPrefabs;
 

@@ -74,6 +74,11 @@ public class Player : MonoBehaviour
         {
             SellHero();
         });
+
+        UIManager.Instance.btnComposeMythHero.onClick.AddListener(() =>
+        {
+            ComposeMythHero();
+        });
         
         // 도박
         UIManager.Instance.btnNormalGamble.onClick.AddListener(() =>
@@ -199,6 +204,46 @@ public class Player : MonoBehaviour
         randomHeroID = randomHero.ID;
 
         HeroManager.Instance.SummonHero(randomHeroID, _summonPointManager);
+    }
+
+    public INode.EState ComposeMythHero()
+    {
+        List<Hero> mythHeroPrefabs = HeroManager.Instance.GetHeroPrefabsByGrade(Hero.EGrade.Myth);
+
+        foreach(Hero mythHeroPrefab in mythHeroPrefabs)
+        {
+            var mythComposition = mythHeroPrefab.GetComponent<HeroMythComposition>();
+
+            if (mythComposition.IsComposable(_summonPointManager.SummonPoints, out Dictionary<int, List<SummonPoint>> materialHeroMap))
+            {
+                // 각 타일에서 재료 영웅 제거, 타일 중 가장 숫자가 적은 곳을 선택
+                foreach(var pair in materialHeroMap)
+                {
+                    List<SummonPoint> summonPoints = pair.Value;
+                    SummonPoint targetPoint = summonPoints[0];
+
+                    foreach(var summonPoint in summonPoints)
+                    {
+                        if(summonPoint.Heroes.Count < targetPoint.Heroes.Count)
+                        {
+                            targetPoint = summonPoint;
+                        }
+                    }
+
+                    targetPoint.TryGetHero(out Hero removeHero);
+                    targetPoint.RemoveHero(removeHero);
+
+                    HeroManager.Instance.KillHero(removeHero);
+                }
+
+                // 신화 영웅 생성
+                HeroManager.Instance.SummonHero(mythHeroPrefab.ID, _summonPointManager);
+
+                return INode.EState.Success;
+            }
+        }
+
+        return INode.EState.Failure;
     }
 
     public INode.EState SellHero()
