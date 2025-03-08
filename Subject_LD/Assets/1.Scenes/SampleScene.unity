@@ -11298,9 +11298,9 @@ MonoBehaviour:
   _waveTime: 20
   _bossWaveTime: 60
   _waveInterval: 5
-  _bossWaveNumber: 3
-  _spawnCount: 5
+  _bossWaveNumber: 10
   _spawnInterval: 1
+  _oppositeSpawnDelay: 0.3
   _wayPoints:
   - {fileID: 1309890089}
   - {fileID: 1185932906}

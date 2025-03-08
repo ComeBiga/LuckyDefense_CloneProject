@@ -15,6 +15,7 @@ public class WaveSystem : MonoBehaviour
     private Monster[] _monsterPrefabs;
     [SerializeField]
     private Monster _bossMonsterPrefab;
+    [Header("Wave")]
     [SerializeField]
     private float _waveTime = 20f;
     [SerializeField]
@@ -23,10 +24,12 @@ public class WaveSystem : MonoBehaviour
     private float _waveInterval = 5f;
     [SerializeField]
     private int _bossWaveNumber = 10;
-    [SerializeField]
-    private int _spawnCount = 5;
+    [Header("Spawn")]
     [SerializeField]
     private float _spawnInterval;
+    [SerializeField]
+    private float _oppositeSpawnDelay = .3f;
+    [Header("WayPoint")]
     [SerializeField]
     private Transform[] _wayPoints;
     [SerializeField]
@@ -98,7 +101,7 @@ public class WaveSystem : MonoBehaviour
                     spawnTimer = 0f;
 
                     spawnMonster(_monsterPrefabs[0], _wayPoints);
-                    spawnMonster(_monsterPrefabs[0], _oppositeWayPoints);
+                    StartCoroutine(eSpawnMonster(_monsterPrefabs[0], _oppositeWayPoints, _oppositeSpawnDelay));
                 }
             }
             else
@@ -169,5 +172,12 @@ public class WaveSystem : MonoBehaviour
     private Monster spawnBossMonster()
     {
         return spawnMonster(_bossMonsterPrefab, _wayPoints);
+    }
+
+    private IEnumerator eSpawnMonster(Monster monsterPrefab, Transform[] wayPoints, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        spawnMonster(monsterPrefab, wayPoints);
     }
 }
