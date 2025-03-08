@@ -171,19 +171,11 @@ public class Player : MonoBehaviour
         return INode.EState.Success;
     }
 
-    public void ComposeHero(SummonPoint summonPoint)
+    public INode.EState ComposeHero(SummonPoint summonPoint)
     {
         var composedHeroes = new List<Hero>(summonPoint.Heroes);
-        summonPoint.Clear();
-
         Hero.EGrade grade = composedHeroes[0].Grade;
 
-        for (int i = composedHeroes.Count - 1; i >= 0; i--)
-        {
-            Destroy(composedHeroes[i].gameObject);
-        }
-
-        int randomHeroID = 0;
         List<Hero> heroPrefabs = new List<Hero>(10);
 
         switch (grade)
@@ -195,15 +187,24 @@ public class Player : MonoBehaviour
                 heroPrefabs = HeroManager.Instance.GetHeroPrefabsByGrade(Hero.EGrade.Hero);
                 break;
             case Hero.EGrade.Hero:
-                heroPrefabs = HeroManager.Instance.GetHeroPrefabsByGrade(Hero.EGrade.Myth);
-                break;
+                //heroPrefabs = HeroManager.Instance.GetHeroPrefabsByGrade(Hero.EGrade.Myth);
+                return INode.EState.Failure;
+        }
+
+        summonPoint.Clear();
+
+        for (int i = composedHeroes.Count - 1; i >= 0; i--)
+        {
+            Destroy(composedHeroes[i].gameObject);
         }
 
         int randomIndex = UnityEngine.Random.Range(0, heroPrefabs.Count);
         Hero randomHero = heroPrefabs[randomIndex];
-        randomHeroID = randomHero.ID;
+        int randomHeroID = randomHero.ID;
 
         HeroManager.Instance.SummonHero(randomHeroID, _summonPointManager);
+
+        return INode.EState.Success;
     }
 
     public INode.EState ComposeMythHero()

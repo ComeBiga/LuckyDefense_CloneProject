@@ -132,12 +132,24 @@ public class SummonPoint : MonoBehaviour
 
     private void refreshPositionType()
     {
+        if(TryGetHero(out Hero hero) && hero.Grade == Hero.EGrade.Myth)
+        {
+            mPositionType = EPositionType.Tripple;
+            return;
+        }
+
         mPositionType = (EPositionType)mHeroes.Count;
     }
 
     private void setPosition(EPositionType positionType)
     {
-        switch(positionType)
+        if (TryGetHero(out Hero hero) && hero.Grade == Hero.EGrade.Myth)
+        {
+            mHeroes[0].transform.position = transform.position;
+            return;
+        }
+
+        switch (positionType)
         {
             case EPositionType.None:
                 break;
