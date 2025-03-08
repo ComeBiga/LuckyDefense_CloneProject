@@ -58,6 +58,19 @@ public class SummonPointManager : MonoBehaviour
         return null;
     }
 
+    public SummonPoint FindFullSummonPoint()
+    {
+        for (int i = 0; i < mSummonPoints.Length; ++i)
+        {
+            if (mSummonPoints[i].IsFull)
+            {
+                return mSummonPoints[i];
+            }
+        }
+
+        return null;
+    }
+
     public SummonPoint GetEmptySummonPoint()
     {
         for (int i = 0; i < mSummonPoints.Length; ++i)

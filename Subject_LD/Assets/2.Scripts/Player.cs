@@ -142,15 +142,34 @@ public class Player : MonoBehaviour
         return INode.EState.Success;
     }
 
-    public INode.EState ComposeHero()
+    public void ComposeHero()
     {
         if (_summonPointManager.SelectedSummonPoint.PositionType != SummonPoint.EPositionType.Tripple)
+        {
+            return;
+        }
+
+        ComposeHero(_summonPointManager.SelectedSummonPoint);
+    }
+    
+    public INode.EState ComposeHeroByAI()
+    {
+        SummonPoint fullSummonPoint = _summonPointManager.FindFullSummonPoint();
+
+        if (fullSummonPoint == null)
         {
             return INode.EState.Failure;
         }
 
-        var composedHeroes = new List<Hero>(_summonPointManager.SelectedSummonPoint.Heroes);
-        _summonPointManager.SelectedSummonPoint.Clear();
+        ComposeHero(fullSummonPoint);
+
+        return INode.EState.Success;
+    }
+
+    public void ComposeHero(SummonPoint summonPoint)
+    {
+        var composedHeroes = new List<Hero>(summonPoint.Heroes);
+        summonPoint.Clear();
 
         Hero.EGrade grade = composedHeroes[0].Grade;
 
@@ -179,10 +198,7 @@ public class Player : MonoBehaviour
         Hero randomHero = heroPrefabs[randomIndex];
         randomHeroID = randomHero.ID;
 
-        // TrySummonHero(randomHeroID);
         HeroManager.Instance.SummonHero(randomHeroID, _summonPointManager);
-
-        return INode.EState.Success;
     }
 
     public INode.EState SellHero()
@@ -213,6 +229,7 @@ public class Player : MonoBehaviour
         var selectorNode = new SelectorNode(
             new List<INode>()
             {
+                new ActionNode(ComposeHeroByAI),
                 new ActionNode(SummonHero),
             });
 
