@@ -177,13 +177,30 @@ public class BattleSystem : MonoBehaviour
         var composedHeroes = new List<Hero>(_summonPointManager.SelectedSummonPoint.Heroes);
         _summonPointManager.SelectedSummonPoint.Clear();
 
+        Hero.EGrade grade = composedHeroes[0].Grade;
+
         for(int i = composedHeroes.Count - 1; i >= 0; i--)
         {
             Destroy(composedHeroes[i].gameObject);
         }
 
+        int randomHeroID = 0;
+
+        switch(grade)
+        {
+            case Hero.EGrade.Normal:
+                randomHeroID = UnityEngine.Random.Range(100, 101);
+                break;
+            case Hero.EGrade.Rare:
+                randomHeroID = UnityEngine.Random.Range(200, 202);
+                break;
+            case Hero.EGrade.Hero:
+                randomHeroID = UnityEngine.Random.Range(300, 302);
+                break;
+        }
+
         // summonHero(UnityEngine.Random.Range(100, 101), _summonPointManager.SelectedSummonPoint);
-        TrySummonHero(UnityEngine.Random.Range(100, 101));
+        TrySummonHero(randomHeroID);
     }
 
     public void SellHero()

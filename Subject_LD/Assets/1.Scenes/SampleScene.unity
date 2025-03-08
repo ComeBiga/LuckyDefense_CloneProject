@@ -6171,10 +6171,14 @@ MonoBehaviour:
   - {fileID: 2941865507169276832, guid: 40012dde8db52594685b16856a6e868e, type: 3}
   - {fileID: 2941865507169276832, guid: fddae0be0e394cf47b974084ef3ffe6b, type: 3}
   - {fileID: 2941865507169276832, guid: efa33dc744fc7524e84cd2497e3571d3, type: 3}
+  - {fileID: 2941865507169276832, guid: a82dd587164154b4bbb48e678685f499, type: 3}
+  - {fileID: 2941865507169276832, guid: fdec59dcaba80b447bb4a5e7430d8f78, type: 3}
+  - {fileID: 2941865507169276832, guid: f816d1eb1752b514089e3dfa7fac18e5, type: 3}
+  - {fileID: 2941865507169276832, guid: eebe0fdca9c24954dbee4adf6e03ac93, type: 3}
   _waveSystem: {fileID: 2111186287}
   _summonPointManager: {fileID: 426191231}
   _startGoldCount: 100
-  _startDiaCount: 2
+  _startDiaCount: 100
   _startSummonHeroPrice: 20
   _summonHeroIncreasePrice: 2
   _monsterKillRewardGold: 2
