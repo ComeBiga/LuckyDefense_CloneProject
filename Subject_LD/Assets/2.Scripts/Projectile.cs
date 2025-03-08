@@ -17,6 +17,12 @@ public class Projectile : MonoBehaviour
 
     public void Shoot(Monster targetMonster, int damage)
     {
+        if (targetMonster == null)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+
         mTargetMonster = targetMonster;
         mDamage = damage;
         mbActive = true;
@@ -38,6 +44,11 @@ public class Projectile : MonoBehaviour
     {
         while(mbActive)
         {
+            if(mTargetMonster == null)
+            {
+                break;
+            }
+
             // 타겟 방향 계산
             Vector3 direction = (mTargetMonster.transform.position - transform.position).normalized;
 

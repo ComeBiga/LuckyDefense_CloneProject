@@ -14,6 +14,9 @@ public class HeroAttack : MonoBehaviour
     protected float _attackRange = 3f;
 
     protected HeroAnimation mHeroAnimation;
+    protected AnimationEventReceiver mAnimationEventReceiver;
+
+    private Monster mTargetMonster;
 
     public void StartAttack()
     {
@@ -22,14 +25,26 @@ public class HeroAttack : MonoBehaviour
 
     protected virtual void attack(Monster targetMonster)
     {
-        targetMonster.DecreaseHp(_attackDamage);
+        mTargetMonster = targetMonster;
 
         mHeroAnimation.Attack();
+    }
+
+    protected virtual void onAttackAnimationEvent()
+    {
+        mTargetMonster.DecreaseHp(_attackDamage);
     }
 
     private void Awake()
     {
         mHeroAnimation = GetComponent<HeroAnimation>();
+        mAnimationEventReceiver = GetComponentInChildren<AnimationEventReceiver>();
+    }
+
+    private void Start()
+    {
+        if(mAnimationEventReceiver != null)
+            mAnimationEventReceiver.onAttack += onAttackAnimationEvent;
     }
 
     void OnDrawGizmosSelected()

@@ -6,12 +6,16 @@ public class HeroAnimation : MonoBehaviour
 {
     [SerializeField]
     private float _attackInterval = .2f;
+    [SerializeField]
+    private Animator _animator;
 
     private SpriteRenderer _spriteRenderer;
     private Color mDefaultColor;
 
     public void Attack()
     {
+        _animator?.SetTrigger("Attack");
+
         StartCoroutine(eAttack());
     }
 
