@@ -48,6 +48,11 @@ public class BattleSystem : MonoBehaviour
             _AI.Wallet.AddCurrentGoldCount(_waveEndRewardGold);
         };
 
+        _waveSystem.onGameOver += () =>
+        {
+            UIManager.Instance.goGameOverUI.SetActive(true);
+        };
+
         if (runAI)
         {
             _AI.Run();

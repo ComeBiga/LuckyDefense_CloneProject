@@ -31,6 +31,7 @@ public class UIManager : MonoBehaviour
 
     public GameObject goGamblingUI;
     public GameObject goNextWaveTimer;
+    public GameObject goGameOverUI;
 
     public void SetRemainWaveTime(float remainWaveTime)
     {
@@ -60,11 +61,11 @@ public class UIManager : MonoBehaviour
         _txtSummonHeroPrice.text = $"{price}";
     }
 
-    public void SetMonsterCount(int count)
+    public void SetMonsterCount(int count, int max)
     {
-        _txtMonsterCount.text = $"{count}/100";
+        _txtMonsterCount.text = $"{count}/{max}";
 
-        sliderMonsterCount.value = count / 100f ;
+        sliderMonsterCount.value = (float)count / max ;
     }
 
     public void SetNextWaveTimer(bool value, float time)

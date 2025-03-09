@@ -18,6 +18,16 @@ public class Monster : MonoBehaviour
     private MonsterAnimation mMonsterAnimation;
     private MonsterCanvas mMonsterCanvas;
 
+    public void SetMaxHp(int amount)
+    {
+        _maxHp = amount;
+    }
+    
+    public void AddMaxHp(int amount)
+    {
+        _maxHp += amount;
+    }
+
     public void DecreaseHp(int amount)
     {
         mCurrentHp -= amount;
