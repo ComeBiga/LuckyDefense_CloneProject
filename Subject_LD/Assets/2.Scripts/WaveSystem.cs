@@ -131,7 +131,7 @@ public class WaveSystem : MonoBehaviour
         Monster bossMonster = spawnMonster(_bossMonsterPrefab, _wayPoints);
         Monster oppositeBossMonster = null;
         StartCoroutine(eSpawnMonster(_bossMonsterPrefab, 
-                                    _wayPoints, 
+                                    _oppositeWayPoints, 
                                     _oppositeSpawnDelay, 
                                     (spawnMonster) => { oppositeBossMonster = spawnMonster; }));
 

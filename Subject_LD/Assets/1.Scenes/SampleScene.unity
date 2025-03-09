@@ -15738,7 +15738,7 @@ MonoBehaviour:
   _bossWaveTime: 60
   _waveInterval: 5
   _bossWaveNumber: 10
-  _monsterHpIncreasePerWave: 500
+  _monsterHpIncreasePerWave: 300
   _gameOverMonsterCount: 100
   _spawnInterval: 0.7
   _oppositeSpawnDelay: 0.3
