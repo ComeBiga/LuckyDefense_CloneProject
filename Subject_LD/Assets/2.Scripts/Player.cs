@@ -208,6 +208,7 @@ public class Player : MonoBehaviour
                 heroPrefabs = HeroManager.Instance.GetHeroPrefabsByGrade(Hero.EGrade.Hero);
                 break;
             case Hero.EGrade.Hero:
+            case Hero.EGrade.Myth:
                 //heroPrefabs = HeroManager.Instance.GetHeroPrefabsByGrade(Hero.EGrade.Myth);
                 return INode.EState.Failure;
         }
@@ -273,6 +274,18 @@ public class Player : MonoBehaviour
         return INode.EState.Failure;
     }
 
+    public INode.EState ComposeMythHeroByAI()
+    {
+        if (isComposableMythHero(out Dictionary<int, Dictionary<int, List<SummonPoint>>> composableMythHeroMap))
+        {
+            ComposeMythHero();
+
+            return INode.EState.Success;
+        }
+
+        return INode.EState.Failure;
+    }
+
     public INode.EState SellHero()
     {
         SummonPoint selectedSummonPoint = _summonPointManager.SelectedSummonPoint;
@@ -318,6 +331,7 @@ public class Player : MonoBehaviour
         var selectorNode = new SelectorNode(
             new List<INode>()
             {
+                new ActionNode(ComposeMythHeroByAI),
                 new ActionNode(ComposeHeroByAI),
                 new ActionNode(SummonHero),
             });

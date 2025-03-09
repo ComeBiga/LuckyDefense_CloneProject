@@ -17,6 +17,7 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI _txtMonsterCount;
     public TextMeshProUGUI _txtNextWaveTimer;
     public TextMeshProUGUI txtComposableMythHeroCount;
+    public TextMeshProUGUI txtGamblingResult;
 
     public Button btnSummonHero;
     public Button btnGamblingUI;
@@ -93,11 +94,27 @@ public class UIManager : MonoBehaviour
         goGamblingUI.SetActive(false);
     }
 
+    public void ShowGamblingResult(bool result)
+    {
+        txtGamblingResult.text = result ? "¿î»¡ »Ì±â ¼º°ø!" : "¿î»¡ »Ì±â ½ÇÆÐ..";
+
+        StartCoroutine(eShowGamblingResult());
+    }
+
     private void Awake()
     {
         if(mInstance == null)
         {
             mInstance = this;
         }
+    }
+
+    private IEnumerator eShowGamblingResult()
+    {
+        txtGamblingResult.gameObject.SetActive(true);
+
+        yield return new WaitForSeconds(5f);
+
+        txtGamblingResult.gameObject.SetActive(false);
     }
 }

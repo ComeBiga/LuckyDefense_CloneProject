@@ -21,6 +21,10 @@ public class BattleSystem : MonoBehaviour
     [SerializeField]
     private int _monsterKillRewardGold = 2;
     [SerializeField]
+    private int _diaRewardWaveNumber = 5;
+    [SerializeField]
+    private int _waveEndRewardDia = 5;
+    [SerializeField]
     private int _waveEndRewardGold = 20;
 
     public void RewardMonsterKill()
@@ -46,6 +50,11 @@ public class BattleSystem : MonoBehaviour
         {
             _player.Wallet.AddCurrentGoldCount(_waveEndRewardGold);
             _AI.Wallet.AddCurrentGoldCount(_waveEndRewardGold);
+
+            if(_waveSystem.CurrentWaveCount == _diaRewardWaveNumber)
+            {
+                _player.Wallet.AddCurrentDiaCount(_waveEndRewardDia);
+            }
         };
 
         _waveSystem.onGameOver += () =>

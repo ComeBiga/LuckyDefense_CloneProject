@@ -35,11 +35,13 @@ public class GamblingSystem : MonoBehaviour
             //Hero randomHero = heroPrefabsByGrade[randomIndex];
 
             //HeroManager.Instance.SummonHero(randomHero.ID);
+            UIManager.Instance.ShowGamblingResult(true);
 
             return true;
         }
 
-        Debug.LogError("도박 실패!");
+        UIManager.Instance.ShowGamblingResult(false);
+        // Debug.LogError("도박 실패!");
         return false;
     }
 
