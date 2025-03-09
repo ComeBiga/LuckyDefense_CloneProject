@@ -147,8 +147,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _hero: {fileID: 2941865507169276832}
   _materialHeroes:
-  - {fileID: 2941865507169276832, guid: 973e17193f67cec43b70c4284893e0ca, type: 3}
-  - {fileID: 2941865507169276832, guid: 40012dde8db52594685b16856a6e868e, type: 3}
+  - {fileID: 2941865507169276832, guid: fddae0be0e394cf47b974084ef3ffe6b, type: 3}
+  - {fileID: 2941865507169276832, guid: fdec59dcaba80b447bb4a5e7430d8f78, type: 3}
 --- !u!1001 &5127765610863048206
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -163,6 +163,18 @@ PrefabInstance:
     - target: {fileID: 4000010464396976, guid: a3c1faf915dc240bca8ed7566d46910c, type: 3}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010464396976, guid: a3c1faf915dc240bca8ed7566d46910c, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010464396976, guid: a3c1faf915dc240bca8ed7566d46910c, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010464396976, guid: a3c1faf915dc240bca8ed7566d46910c, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4000010464396976, guid: a3c1faf915dc240bca8ed7566d46910c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -203,6 +215,10 @@ PrefabInstance:
     - target: {fileID: 4000010464396976, guid: a3c1faf915dc240bca8ed7566d46910c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010464396976, guid: a3c1faf915dc240bca8ed7566d46910c, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 212000010422911958, guid: a3c1faf915dc240bca8ed7566d46910c, type: 3}
       propertyPath: m_SortingLayer
