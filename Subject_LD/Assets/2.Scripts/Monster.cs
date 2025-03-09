@@ -6,12 +6,14 @@ using UnityEngine.EventSystems;
 
 public class Monster : MonoBehaviour
 {
+    public bool IsDied => mbIsDied;
     public event Action onDied = null;
 
     [SerializeField]
     private int _maxHp = 10;
 
     private int mCurrentHp = 0;
+    private bool mbIsDied = false;
     private MonsterMovement mMonsterMovement;
     private MonsterAnimation mMonsterAnimation;
     private MonsterCanvas mMonsterCanvas;
@@ -42,6 +44,7 @@ public class Monster : MonoBehaviour
 
     public void Die()
     {
+        mbIsDied = true;
         onDied?.Invoke();
 
         Destroy(this.gameObject);

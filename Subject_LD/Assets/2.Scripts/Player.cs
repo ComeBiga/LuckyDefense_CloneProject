@@ -116,8 +116,10 @@ public class Player : MonoBehaviour
             return INode.EState.Failure;
         }
 
-        int randomHeroID = UnityEngine.Random.Range(0, 2);
-        HeroManager.Instance.SummonHero(randomHeroID, _summonPointManager);
+        // int randomHeroID = UnityEngine.Random.Range(0, 2);
+        List<Hero> heroPrefabsByGrade = HeroManager.Instance.GetHeroPrefabsByGrade(Hero.EGrade.Normal);
+        Hero randomHero = heroPrefabsByGrade[UnityEngine.Random.Range(0, heroPrefabsByGrade.Count)];
+        HeroManager.Instance.SummonHero(randomHero.ID, _summonPointManager);
 
         mWallet.ReduceCurrentGoldCount(mCurrentSummonHeroPrice);
         addCurrentSummonHeroPrice(_summonHeroIncreasePrice);

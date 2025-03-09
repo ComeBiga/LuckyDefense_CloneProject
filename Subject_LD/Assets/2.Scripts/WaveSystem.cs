@@ -37,6 +37,7 @@ public class WaveSystem : MonoBehaviour
 
     private float mWaveTimer;
     private int mCurrentWaveCount = 0;
+    private bool mbGameOver = false;
     private List<Monster> mMonsters = new List<Monster>(150);
 
     public void StartWave()
@@ -122,7 +123,13 @@ public class WaveSystem : MonoBehaviour
 
     private IEnumerator eStartBossWave(Action onWaveEnd = null)
     {
-        spawnBossMonster();
+        Monster bossMonster = spawnBossMonster();
+
+        bool bWaveClear = false;
+        bossMonster.onDied += () =>
+        {
+            bWaveClear = true;
+        };
 
         mWaveTimer = 0f;
         float waveTime = _bossWaveTime;
@@ -131,10 +138,15 @@ public class WaveSystem : MonoBehaviour
         {
             UIManager.Instance.SetRemainWaveTime(waveTime - mWaveTimer);
 
-            if (mWaveTimer > waveTime)
+            if (mWaveTimer > waveTime || bWaveClear)
             {
                 mWaveTimer = 0f;
                 UIManager.Instance.SetRemainWaveTime(0f);
+
+                if (!bossMonster.IsDied)
+                {
+                    
+                }
 
                 break;
             }
@@ -165,6 +177,11 @@ public class WaveSystem : MonoBehaviour
 
         mMonsters.Add(newMonster);
         UIManager.Instance.SetMonsterCount(mMonsters.Count);
+
+        if(mMonsters.Count >= 100)
+        {
+            mbGameOver = true;
+        }
 
         return newMonster;
     }

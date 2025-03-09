@@ -18,12 +18,18 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI _txtNextWaveTimer;
 
     public Button btnSummonHero;
+    public Button btnGamblingUI;
     public Button btnNormalGamble;
     public Button btnHeroGamble;
     public Button btnMythGamble;
     public Button btnComposeHero;
     public Button btnSellHero;
     public Button btnComposeMythHero;
+
+    public Slider sliderMonsterCount;
+
+    public GameObject goGamblingUI;
+    public GameObject goNextWaveTimer;
 
     public void SetRemainWaveTime(float remainWaveTime)
     {
@@ -40,31 +46,44 @@ public class UIManager : MonoBehaviour
 
     public void SetGoldCount(int count)
     {
-        _txtGoldCount.text = $"Gold {count}";
+        _txtGoldCount.text = $"{count}";
     }
 
     public void SetDiaCount(int count)
     {
-        _txtDiaCount.text = $"Dia {count}";
+        _txtDiaCount.text = $"{count}";
     }
 
     public void SetSummonHeroPrice(int price)
     {
-        _txtSummonHeroPrice.text = $"[{price}]";
+        _txtSummonHeroPrice.text = $"{price}";
     }
 
     public void SetMonsterCount(int count)
     {
-        _txtMonsterCount.text = $"{count}";
+        _txtMonsterCount.text = $"{count}/100";
+
+        sliderMonsterCount.value = count / 100f ;
     }
 
     public void SetNextWaveTimer(bool value, float time)
     {
-        _txtNextWaveTimer.gameObject.SetActive(value);
+        //_txtNextWaveTimer.gameObject.SetActive(value);
+        goNextWaveTimer.gameObject.SetActive(value);
 
         int seconds = Mathf.FloorToInt(time % 60);
 
         _txtNextWaveTimer.text = $"{seconds}";
+    }
+
+    public void ShowGamblingUI()
+    {
+        goGamblingUI.SetActive(true);
+    }
+
+    public void HideGamblingUI()
+    {
+        goGamblingUI.SetActive(false);
     }
 
     private void Awake()
