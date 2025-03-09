@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,9 @@ public class HeroManager : MonoBehaviour
     private static HeroManager mInstance = null;
 
     public List<Hero> SummonedHeroes => mSummonedHeroes;
+
+    public event Action<int> onSummonHero = null;
+    public event Action<int> onKillHero = null;
 
     [SerializeField]
     private List<Hero> _heroPrefabs;
@@ -47,10 +51,14 @@ public class HeroManager : MonoBehaviour
         summonedHeroAttack.StartAttack();
 
         mSummonedHeroes.Add(summonedHero);
+
+        onSummonHero?.Invoke(summonedHero.ID);
     }
 
     public void KillHero(Hero hero)
     {
+        onKillHero?.Invoke(hero.ID);
+
         Destroy(hero.gameObject);
     }
 

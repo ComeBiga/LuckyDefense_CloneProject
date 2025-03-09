@@ -16,6 +16,7 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI _txtSummonHeroPrice;
     public TextMeshProUGUI _txtMonsterCount;
     public TextMeshProUGUI _txtNextWaveTimer;
+    public TextMeshProUGUI txtComposableMythHeroCount;
 
     public Button btnSummonHero;
     public Button btnGamblingUI;
@@ -74,6 +75,11 @@ public class UIManager : MonoBehaviour
         int seconds = Mathf.FloorToInt(time % 60);
 
         _txtNextWaveTimer.text = $"{seconds}";
+    }
+    
+    public void SetComposableMythHeroCount(int count)
+    {
+        txtComposableMythHeroCount.text = $"{count}";
     }
 
     public void ShowGamblingUI()

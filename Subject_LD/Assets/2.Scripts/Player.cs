@@ -75,10 +75,29 @@ public class Player : MonoBehaviour
             SellHero();
         });
 
+        // 신화 조합
         UIManager.Instance.btnComposeMythHero.onClick.AddListener(() =>
         {
             ComposeMythHero();
         });
+
+        HeroManager.Instance.onSummonHero += (heroID) =>
+        {
+            if(isComposableMythHero(out Dictionary<int, Dictionary<int, List<SummonPoint>>> composableMythHeroMap))
+            {
+            }
+
+            UIManager.Instance.SetComposableMythHeroCount(composableMythHeroMap.Count);
+        };
+        
+        HeroManager.Instance.onKillHero += (heroID) =>
+        {
+            if(isComposableMythHero(out Dictionary<int, Dictionary<int, List<SummonPoint>>> composableMythHeroMap))
+            {
+            }
+
+            UIManager.Instance.SetComposableMythHeroCount(composableMythHeroMap.Count);
+        };
         
         // 도박
         UIManager.Instance.btnNormalGamble.onClick.AddListener(() =>
@@ -348,5 +367,25 @@ public class Player : MonoBehaviour
 
         if(mbPlayable)
             UIManager.Instance.SetSummonHeroPrice(mCurrentSummonHeroPrice);
+    }
+
+    private bool isComposableMythHero(out Dictionary<int, Dictionary<int, List<SummonPoint>>> composableMythHeroMap)
+    {
+        bool bComposable = false;
+        composableMythHeroMap = new Dictionary<int, Dictionary<int, List<SummonPoint>>>(5);
+        List<Hero> mythHeroPrefabs = HeroManager.Instance.GetHeroPrefabsByGrade(Hero.EGrade.Myth);
+
+        foreach (Hero mythHeroPrefab in mythHeroPrefabs)
+        {
+            var mythComposition = mythHeroPrefab.GetComponent<HeroMythComposition>();
+
+            if (mythComposition.IsComposable(_summonPointManager.SummonPoints, out Dictionary<int, List<SummonPoint>> materialHeroMap))
+            {
+                composableMythHeroMap.Add(mythHeroPrefab.ID, materialHeroMap);
+                bComposable = true;
+            }
+        }
+
+        return bComposable;
     }
 }

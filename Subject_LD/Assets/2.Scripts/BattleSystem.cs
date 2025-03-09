@@ -11,8 +11,6 @@ public class BattleSystem : MonoBehaviour
     public bool runAI = true;
 
     [SerializeField]
-    private List<Hero> _heroPrefabs;
-    [SerializeField]
     private WaveSystem _waveSystem;
     [SerializeField]
     private Player _player;
