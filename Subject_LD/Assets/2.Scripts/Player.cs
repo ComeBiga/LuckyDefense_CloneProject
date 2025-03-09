@@ -131,7 +131,7 @@ public class Player : MonoBehaviour
     {
         if (mCurrentSummonHeroPrice > mWallet.CurrentGoldCount)
         {
-            Debug.LogError($"골드가 부족합니다!");
+            // Debug.LogError($"골드가 부족합니다!");
             return INode.EState.Failure;
         }
 
@@ -187,9 +187,7 @@ public class Player : MonoBehaviour
             return INode.EState.Failure;
         }
 
-        ComposeHero(fullSummonPoint);
-
-        return INode.EState.Success;
+        return ComposeHero(fullSummonPoint);
     }
 
     public INode.EState ComposeHero(SummonPoint summonPoint)

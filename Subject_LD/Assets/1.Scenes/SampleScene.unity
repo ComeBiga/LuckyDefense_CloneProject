@@ -14398,7 +14398,7 @@ MonoBehaviour:
   _GamblingSystem: {fileID: 2111186289}
   _summonPointManager: {fileID: 1653835244}
   _startGoldCount: 100
-  _startDiaCount: 5
+  _startDiaCount: 0
   _startSummonHeroPrice: 20
   _summonHeroIncreasePrice: 2
   _monsterKillRewardGold: 2

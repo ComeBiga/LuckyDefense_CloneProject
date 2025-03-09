@@ -59,12 +59,22 @@ public class SummonPointManager : MonoBehaviour
         return null;
     }
 
-    public SummonPoint FindFullSummonPoint()
+    public SummonPoint FindFullSummonPoint(bool withMythHero = false)
     {
         for (int i = 0; i < mSummonPoints.Length; ++i)
         {
             if (mSummonPoints[i].IsFull)
             {
+                if(!withMythHero)
+                {
+                    mSummonPoints[i].TryGetHero(out Hero hero);
+
+                    if(hero.Grade == Hero.EGrade.Myth)
+                    {
+                        continue;
+                    }
+                }
+
                 return mSummonPoints[i];
             }
         }
