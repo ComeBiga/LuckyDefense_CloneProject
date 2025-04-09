@@ -12,6 +12,9 @@ public class Player : MonoBehaviour
     [SerializeField]
     private SummonPointManager _summonPointManager;
 
+    [SerializeField]
+    private int _maxHeroCount = 20;
+
     [Header("Gold")]
     [SerializeField]
     private int _startGoldCount = 100;
@@ -54,6 +57,8 @@ public class Player : MonoBehaviour
         mWallet.SetCurrentDiaCount(_startDiaCount);
 
         setCurrentSummonHeroPrice(_startSummonHeroPrice);
+
+        UIManager.Instance.SetHeroCount(0);
     }
 
     public void SetPlayable()
@@ -62,6 +67,11 @@ public class Player : MonoBehaviour
 
         UIManager.Instance.btnSummonHero.onClick.AddListener(() =>
         {
+            if(_summonPointManager.GetHeroCount() >= _maxHeroCount)
+            {
+                return;
+            }
+
             SummonHero();
         });
 
@@ -87,6 +97,7 @@ public class Player : MonoBehaviour
             {
             }
 
+            UIManager.Instance.SetHeroCount(_summonPointManager.GetHeroCount());
             UIManager.Instance.SetComposableMythHeroCount(composableMythHeroMap.Count);
         };
         
@@ -96,6 +107,7 @@ public class Player : MonoBehaviour
             {
             }
 
+            UIManager.Instance.SetHeroCount(_summonPointManager.GetHeroCount());
             UIManager.Instance.SetComposableMythHeroCount(composableMythHeroMap.Count);
         };
         

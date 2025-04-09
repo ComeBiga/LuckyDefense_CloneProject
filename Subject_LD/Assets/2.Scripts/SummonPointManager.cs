@@ -81,6 +81,28 @@ public class SummonPointManager : MonoBehaviour
 
         return null;
     }
+    
+    public int GetHeroCount()
+    {
+        int heroCount = 0;
+
+        for (int i = 0; i < mSummonPoints.Length; ++i)
+        {
+            if (!mSummonPoints[i].TryGetHero(out Hero hero))
+                continue;
+
+            if(hero.Grade == Hero.EGrade.Myth)
+            {
+                ++heroCount;
+
+                continue;
+            }
+
+            heroCount += mSummonPoints[i].Heroes.Count;
+        }
+
+        return heroCount;
+    }
 
     public SummonPoint GetEmptySummonPoint()
     {

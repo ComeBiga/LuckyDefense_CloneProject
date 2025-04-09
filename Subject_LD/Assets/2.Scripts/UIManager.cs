@@ -13,6 +13,7 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI _txtCurrentWave;
     public TextMeshProUGUI _txtGoldCount;
     public TextMeshProUGUI _txtDiaCount;
+    public TextMeshProUGUI _txtHeroCount;
     public TextMeshProUGUI _txtSummonHeroPrice;
     public TextMeshProUGUI _txtMonsterCount;
     public TextMeshProUGUI _txtNextWaveTimer;
@@ -55,6 +56,11 @@ public class UIManager : MonoBehaviour
     public void SetDiaCount(int count)
     {
         _txtDiaCount.text = $"{count}";
+    }
+
+    public void SetHeroCount(int count)
+    {
+        _txtHeroCount.text = $"{count}";
     }
 
     public void SetSummonHeroPrice(int price)
